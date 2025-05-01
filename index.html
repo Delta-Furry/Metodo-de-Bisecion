@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UNEVE - Bisección</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Verdana', sans-serif;
+      background: linear-gradient(135deg, #e1bee7 0%, #f3e5f5 100%);
+      color: #4a148c;
+    }
+    header {
+      background: #7e57c2;
+      padding: 2rem 1rem;
+      text-align: center;
+      color: white;
+    }
+    header h1 { margin: 0; font-size: 2rem; }
+    header span { display: block; margin-top: 0.5rem; font-size: 1rem; }
+    main {
+      padding: 1rem;
+      max-width: 600px;
+      margin: auto;
+    }
+    .inputs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .inputs input {
+      flex: 1 1 100%;
+      padding: 0.5rem;
+      border: 2px solid #ce93d8;
+      border-radius: 4px;
+    }
+    .inputs button {
+      padding: 0.5rem 1rem;
+      border: none;
+      background: #ab47bc;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      flex: 1 1 auto;
+    }
+    .inputs button:hover {
+      background: #8e24aa;
+    }
+    .results-list {
+      list-style: none;
+      padding: 0;
+    }
+    .results-list li {
+      background: #ede7f6;
+      margin-bottom: 0.5rem;
+      padding: 0.75rem;
+      border-left: 6px solid #7e57c2;
+    }
+    .footer {
+      text-align: center;
+      margin: 2rem 0;
+      font-size: 0.85rem;
+      color: #6a1b9a;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>UNEVE - Bisección</h1>
+    <span>Método de Bisección (4 Iteraciones)</span>
+    <span>Integrante: Rodríguez Cruz Mariel Alejandra</span>
+  </header>
+  <main>
+    <div class="inputs">
+      <input type="text" id="func" placeholder="Ingresa f(x), por ejemplo: x*x-2" />
+      <input type="number" id="xi" placeholder="Xi (inferior)" />
+      <input type="number" id="xu" placeholder="Xu (superior)" />
+      <button id="calcBtn">Calcular</button>
+    </div>
+    <ul class="results-list" id="results"></ul>
+  </main>
+  <div class="footer">
+    <span>UNEVE · Cálculo Numérico</span>
+  </div>
+  <script>
+    document.getElementById('calcBtn').addEventListener('click', () => {
+      const expr = document.getElementById('func').value.trim();
+      const xi = parseFloat(document.getElementById('xi').value);
+      const xu = parseFloat(document.getElementById('xu').value);
+      const results = document.getElementById('results');
+      results.innerHTML = '';
+      if (!expr) {
+        results.innerHTML = '<li>Por favor ingresa la función f(x).</li>';
+        return;
+      }
+      let f;
+      try {
+        f = new Function('x', 'return ' + expr + ';');
+        f((xi + xu) / 2);
+      } catch (e) {
+        results.innerHTML = '<li>Función inválida. Revisa la sintaxis.</li>';
+        return;
+      }
+      if (isNaN(xi) || isNaN(xu) || xu <= xi) {
+        results.innerHTML = '<li>Ingrese valores válidos: Xi < Xu.</li>';
+        return;
+      }
+      let a = xi, b = xu;
+      for (let i = 1; i <= 4; i++) {
+        const xm = (a + b) / 2;
+        const li = document.createElement('li');
+        li.textContent = `Iteración ${i}: Xi=${a.toFixed(4)}, Xu=${b.toFixed(4)}, Resultado=${xm.toFixed(4)}`;
+        results.appendChild(li);
+        if (f(a) * f(xm) < 0) b = xm; else a = xm;
+      }
+    });
+  </script>
+</body>
+</html>
